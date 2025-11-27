@@ -1,18 +1,293 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Mental Health Simulator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Simulator - C++ OOP & DSA Project</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <h1>Mental Health Simulator</h1>
-    <div style="text-align:center; margin-top:60px;">
-        <form action="mental_health.php" method="get">
-            <input type="submit" value="Start">
-        </form>
-        <div style="margin-top:20px;">
-            <a href="webcgi/index.html" style="display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid #c7cce0;background:#fff;color:#1b2435;text-decoration:none;">Open Modern C++ GUI Wizard</a>
+    <div class="container">
+        <!-- Login/Register Section -->
+        <div class="auth-container" id="authContainer">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="logo">
+                        <i class="fas fa-brain"></i>
+                        <h1>Mental Health Simulator</h1>
+                    </div>
+                    <p class="subtitle">C++ OOP & DSA Project with Modern GUI</p>
+                </div>
+
+                <!-- Login Form -->
+                <div class="auth-form active" id="loginForm">
+                    <h2><i class="fas fa-sign-in-alt"></i> Welcome Back</h2>
+                    <p>Sign in to continue your mental health journey</p>
+                    
+                    <form id="loginFormElement">
+                        <div class="form-group">
+                            <label for="loginUsername">
+                                <i class="fas fa-user"></i>
+                                Username
+                            </label>
+                            <input type="text" id="loginUsername" name="username" required 
+                                   placeholder="Enter your username">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginPassword">
+                                <i class="fas fa-lock"></i>
+                                Password
+                            </label>
+                            <input type="password" id="loginPassword" name="password" required 
+                                   placeholder="Enter your password">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </form>
+                    
+                    <div class="auth-switch">
+                        <p>Don't have an account? <a href="#" onclick="showRegister()">Register here</a></p>
+                    </div>
+                </div>
+
+                <!-- Registration Form -->
+                <div class="auth-form" id="registerForm">
+                    <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+                    <p>Join us to start your mental health journey</p>
+                    
+                    <form id="registerFormElement">
+                        <div class="form-group">
+                            <label for="regUsername">
+                                <i class="fas fa-user"></i>
+                                Username
+                            </label>
+                            <input type="text" id="regUsername" name="username" required 
+                                   placeholder="Choose a username">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regPassword">
+                                <i class="fas fa-lock"></i>
+                                Password
+                            </label>
+                            <input type="password" id="regPassword" name="password" required 
+                                   placeholder="Create a password">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regName">
+                                <i class="fas fa-id-card"></i>
+                                Full Name
+                            </label>
+                            <input type="text" id="regName" name="name" required 
+                                   placeholder="Enter your full name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regAge">
+                                <i class="fas fa-birthday-cake"></i>
+                                Age
+                            </label>
+                            <input type="number" id="regAge" name="age" required 
+                                   placeholder="Enter your age" min="13" max="120">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regGender">
+                                <i class="fas fa-venus-mars"></i>
+                                Gender
+                            </label>
+                            <select id="regGender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </form>
+                    
+                    <div class="auth-switch">
+                        <p>Already have an account? <a href="#" onclick="showLogin()">Sign in here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Application (Hidden initially) -->
+        <div class="app-container" id="appContainer" style="display: none;">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-brain"></i> Mental Health Simulator</h1>
+                </div>
+                <div class="header-right">
+                    <span class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userDisplayName">User</span>
+                    </span>
+                    <button class="btn btn-secondary" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </header>
+
+            <!-- Session Start Prompt -->
+            <div class="session-prompt" id="sessionPrompt">
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <i class="fas fa-heart"></i>
+                        <h2>Welcome back, <span id="welcomeUserName">User</span>!</h2>
+                    </div>
+                    <p>Would you like to start a new mental health session today?</p>
+                    
+                    <div class="prompt-actions">
+                        <button class="btn btn-primary" onclick="startSession()">
+                            <i class="fas fa-play"></i> Start Session
+                        </button>
+                        <button class="btn btn-secondary" onclick="logout()">
+                            <i class="fas fa-times"></i> Maybe Later
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mood Assessment (Hidden initially) -->
+            <div class="mood-assessment" id="moodAssessment" style="display: none;">
+                <div class="assessment-card">
+                    <div class="assessment-header">
+                        <h2><i class="fas fa-smile"></i> How are you feeling today?</h2>
+                        <p>Select the mood that best describes your current state</p>
+                    </div>
+                    
+                    <div class="mood-options">
+                        <div class="mood-option" data-mood="happy">
+                            <div class="mood-icon">
+                                <i class="fas fa-laugh-beam"></i>
+                            </div>
+                            <span>Happy</span>
+                        </div>
+                        
+                        <div class="mood-option" data-mood="sad">
+                            <div class="mood-icon">
+                                <i class="fas fa-sad-tear"></i>
+                            </div>
+                            <span>Sad</span>
+                        </div>
+                        
+                        <div class="mood-option" data-mood="stressed">
+                            <div class="mood-icon">
+                                <i class="fas fa-tired"></i>
+                            </div>
+                            <span>Stressed</span>
+                        </div>
+                        
+                        <div class="mood-option" data-mood="anxious">
+                            <div class="mood-icon">
+                                <i class="fas fa-worried"></i>
+                            </div>
+                            <span>Anxious</span>
+                        </div>
+                        
+                        <div class="mood-option" data-mood="neutral">
+                            <div class="mood-icon">
+                                <i class="fas fa-meh"></i>
+                            </div>
+                            <span>Neutral</span>
+                        </div>
+                        
+                        <div class="mood-option" data-mood="excited">
+                            <div class="mood-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span>Excited</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations (Hidden initially) -->
+            <div class="recommendations" id="recommendations" style="display: none;">
+                <div class="recommendations-card">
+                    <div class="recommendations-header">
+                        <h2><i class="fas fa-lightbulb"></i> Personalized Recommendations</h2>
+                        <p>Based on your mood: <span id="selectedMood" class="mood-badge">Happy</span></p>
+                    </div>
+                    
+                    <div class="recommendations-content">
+                        <div class="recommendation-section">
+                            <h3><i class="fas fa-quote-left"></i> Motivational Quote</h3>
+                            <div class="quote-card" id="motivationalQuote">
+                                <!-- Quote will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-section">
+                            <h3><i class="fas fa-dumbbell"></i> Suggested Activities</h3>
+                            <div class="activities-list" id="suggestedActivities">
+                                <!-- Activities will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-section">
+                            <h3><i class="fas fa-book"></i> Self-Care Tips</h3>
+                            <div class="tips-list" id="selfCareTips">
+                                <!-- Tips will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendations-actions">
+                        <button class="btn btn-primary" onclick="endSession()">
+                            <i class="fas fa-check"></i> End Session
+                        </button>
+                        <button class="btn btn-secondary" onclick="restartSession()">
+                            <i class="fas fa-redo"></i> Start New Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Modal -->
+        <div class="modal" id="loadingModal">
+            <div class="modal-content">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+                <h3>Processing...</h3>
+                <p id="loadingMessage">Please wait while we process your request.</p>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div class="modal" id="successModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    <h3 id="successTitle">Success!</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="successMessage">Operation completed successfully.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="closeModal()">
+                        <i class="fas fa-check"></i> Continue
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
-</html>
+</html> 
